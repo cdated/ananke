@@ -1,0 +1,70 @@
+#countdown-wrap {
+    width: 80%;
+    height: 100px;
+    margin: auto;
+    padding: 20px;
+    font-family: arial;
+}
+
+#goal {
+    font-size: 30px;
+    text-align: right;
+    width: 100%;
+}
+
+@media only screen and (max-width: 640px) {
+    #goal {
+        text-align: center;
+    }
+}
+
+#glass {
+    width: 100%;
+    height: 10px;
+    background: #c7c7c7;
+    border-radius: 10px;
+    float: left;
+    overflow: hidden;
+}
+
+#progress {
+    float: left;
+    width: 0%;
+    height: 20px;
+    background: #55DD00;
+    z-index: 333;
+}
+
+#expected {
+    position: relative;
+    left: 0%;
+    width: 0.2%;
+    height: 20px;
+    background: #888888;
+    z-index: 333;
+}
+
+.goal-stat {
+    width: 12%;
+    height: 30px;
+    padding: 10px;
+    float: left;
+    margin: 0;
+    color: #333333;
+}
+
+@media only screen and (max-width: 640px) {
+    .goal-stat {
+        width: 40%;
+        text-align: center;
+    }
+}
+
+.goal-number,
+.goal-label {
+    display: block;
+}
+
+.goal-number {
+    font-weight: bold;
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="expires" content="-1">
+
+  <head>
+    <title>{% block title %}{{title}}{% endblock %} - goals</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+
+  <body>
+
+    <script>
+      function log_activity(id, current) {
+        var retVal = prompt("Update progress: ", current);
+      }
+
+      var render = function(id, current, total, units, start, end) {
+        var now = new Date();
+        var startDate = new Date(start);
+        var endDate = new Date(end);
+
+        var daysInPeriod = dayDiff(startDate, endDate);
+        var daysRemaining = dayDiff(now, endDate);
+        var daysPassed = dayDiff(startDate, now)-1;
+
+        function dayDiff(first, second) {
+            var diff = (second-first)/(1000*60*60*24);
+            return Math.ceil(diff);
+        }
+
+        function hexpad(hexString) {
+            decString = parseInt(hexString, 16);
+            return decString >= 16 ? "" + hexString: "0" + hexString;
+        }
+
+        var doc = document.getElementById("countdown" + id);
+        //doc.innerHTML = daysRemaining;
+        var eday = endDate.getDate();
+        var emonthIndex = endDate.getMonth() + 1;
+        var eyear = endDate.getFullYear();
+        doc.innerHTML = emonthIndex + "/"+ eday + "/" + eyear;
+
+        var itemsRemaining = total - current
+
+        var doc = document.getElementById("avg" + id);
+        var avg_rate = current;
+        if (daysPassed > 0) {
+          avg_rate = (current/(daysPassed + 1)).toFixed(2);
+        }
+        doc.innerHTML = avg_rate;
+
+        var doc = document.getElementById("required" + id);
+        // Don't count today in days remaining
+        if (daysRemaining > 1) {
+          var required_rate = (itemsRemaining/(daysRemaining-1)).toFixed(2);
+        } else {
+          var required_rate = itemsRemaining
+        }
+        doc.innerHTML = required_rate;
+
+        var doc = document.getElementById("predictedComplete" + id);
+        var predictedDate = new Date();
+        if (avg_rate > 0) {
+          var expectedDays = Math.ceil((total-current)/avg_rate);
+          predictedDate.setDate(now.getDate()+expectedDays);
+          var day = predictedDate.getDate();
+          var monthIndex = predictedDate.getMonth() + 1;
+          var year = predictedDate.getFullYear();
+        } else {
+          predictedDate = endDate;
+          var day = predictedDate.getDate();
+          var monthIndex = predictedDate.getMonth() + 1;
+          var year = predictedDate.getFullYear();
+        }
+        doc.innerHTML = monthIndex + "/"+ day + "/" + year;
+
+        var percentComplete = (current/total) * 100;
+
+        // If the deadline is passed ensure expectedComplete stays at 100%
+        if (daysPassed + 1 >= daysInPeriod) {
+          var expectedComplete = 100;
+        } else {
+          var expectedComplete = ((daysPassed+1)/daysInPeriod) * 100;
+        }
+
+        var numExpected = (total*(expectedComplete/100))
+        var catchUp = numExpected - current;
+        var behind = 0
+        if (catchUp > 0) {
+          behind = Math.ceil(catchUp);
+        }
+
+        var doc = document.getElementById("behind" + id);
+        doc.innerHTML = behind;
+
+        var doc = document.getElementById("progressPercent" + id);
+        doc.innerHTML = percentComplete.toFixed(2) + "%";
+
+        var doc = document.getElementById("progressRatio" + id);
+        doc.innerHTML = current + "/" + total;
+
+        var doc = document.getElementById("units" + id);
+        doc.innerHTML = units;
+
+        var doc = document.getElementById("progress" + id);
+        doc.style.float= "left";
+        doc.style.width = percentComplete + "%";
+        doc.style.height = "20px";
+
+        if (numExpected <= 0) {
+          marginal_rate = percentComplete;
+        } else {
+          marginal_rate = (current / numExpected);
+        }
+
+        // Transition from red (#FF0022) to green (#55DD22)
+        redPercent = Math.ceil(255 - (170 * marginal_rate*.5))
+        redHex = hexpad(redPercent.toString(16));
+
+        // Increase green quickly, then just let red go down
+        if (marginal_rate < 1.0) {
+          greenPercent = Math.ceil((221 * marginal_rate))
+          greenHex = hexpad(greenPercent.toString(16));
+        } else {
+          greenHex = "DD";
+        }
+
+        if (marginal_rate >= 1.0) {
+          redHex = "55";
+        }
+        color = "#" + redHex + greenHex + "22";
+
+        // Completed tasks are colored blue
+        if (marginal_rate > 1.0) {
+          bluePercent = Math.ceil(255 * (percentComplete/100)
+                                  * marginal_rate)
+          if (bluePercent > 255) {
+            bluePercent = 255;
+          }
+          blueHex = hexpad(bluePercent.toString(16));
+          color = "#00DD" + blueHex;
+        }
+        doc.style.background= color;
+
+        doc.style.zIndex= "333";
+
+        var doc = document.getElementById("expected" + id);
+        doc.style.position = "relative";
+        doc.style.left = expectedComplete + "%";
+        doc.style.width = "0.4%";
+        doc.style.height = "20px";
+        doc.style.background= "#444444";
+        doc.style.zIndex= "334";
+      }
+    </script>
+      {% for goal in goals%}
+
+      <div id=countdown-wrap>
+        <div id="goal">{{goal.name}}</div>
+        <div onclick="log_activity({{goal.id}}, {{goal.current}})" id="glass">
+          <div id="progress{{goal.id}}">
+          </div>
+          <div id="expected{{goal.id}}">
+          </div>
+        </div>
+        <div class="goal-stat">
+          <span class="goal-number">
+            <div id="progressPercent{{goal.id}}"></div>
+          </span>
+          <span class="goal-label">Complete</span>
+        </div>
+        <div class="goal-stat">
+          <span class="goal-number">
+            <div id="progressRatio{{goal.id}}"></div>
+          </span>
+          <span class="goal-label">
+            <div id="units{{goal.id}}"></div>
+          </span>
+        </div>
+        <div class="goal-stat">
+          <span class="goal-number">
+            <div id="behind{{goal.id}}"></div>
+          </span>
+          <span class="goal-label">Behind</span>
+        </div>
+        <div class="goal-stat">
+          <span class="goal-number">
+            <div id="required{{goal.id}}"></div>
+          </span>
+          <span class="goal-label">Req Per Day</span>
+        </div>
+        <div class="goal-stat">
+          <span class="goal-number">
+            <div id="avg{{goal.id}}"></div>
+          </span>
+          <span class="goal-label">Avg Per Day</span>
+        </div>
+        <div class="goal-stat">
+          <span class="goal-number">
+            <div id="predictedComplete{{goal.id}}"></div>
+          </span>
+          <span class="goal-label">Predicted Date</span>
+        </div>
+        <div class="goal-stat">
+          <span class="goal-number">
+            <div id="countdown{{goal.id}}"></div>
+          </span>
+          <span class="goal-label">Due</span>
+        </div>
+      </div>
+
+      <script>
+        render({{goal.id}},
+               {{goal.current}},
+               {{goal.total}},
+               "{{goal.units}}",
+               "{{goal.startDate}}",
+               "{{goal.endDate}}"
+              )
+      </script>
+
+    {% endfor %}
+
+  </body>
+
+
+</html>
