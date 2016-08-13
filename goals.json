@@ -1,6 +1,7 @@
 [
 
     {"name":"TDD with Python",
+    "uid":"cdated",
     "units": "Pages",
     "current":185,
     "total":468,
@@ -10,6 +11,7 @@
     },
 
     {"name":"Linux Programming Interface",
+    "uid":"cdated",
     "units": "Pages",
     "current":102,
     "total":1424,
@@ -19,6 +21,7 @@
     },
 
     {"name":"Deep C Secrets",
+    "uid":"cdated",
     "units": "Pages",
     "current":49,
     "total":290,
@@ -28,6 +31,7 @@
     },
 
     {"name":"Maximum RPM",
+    "uid":"cdated",
     "units": "Pages",
     "current":121,
     "total":550,
@@ -37,6 +41,7 @@
     },
 
     {"name":"Exercise",
+    "uid":"cdated",
     "units": "Push-Ups",
     "current":290,
     "total":1400,
@@ -46,6 +51,7 @@
     },
 
     {"name":"SAS Q3",
+    "uid":"cdated",
     "units": "Pomodoros",
     "current":20,
     "total":360,
@@ -56,6 +62,7 @@
     },
 
     {"name":"GaTech: AI",
+    "uid":"cdated",
     "units": "Pomodoros",
     "current":9,
     "total":510,
@@ -65,6 +72,7 @@
     },
 
     {"name":"AI - Norvig & Russell",
+    "uid":"cdated",
     "units":"Pages",
     "current":75,
     "total":1082,
@@ -74,6 +82,7 @@
     },
 
     {"name":"AI - For Games",
+    "uid":"cdated",
     "units":"Pages",
     "current":69,
     "total":865,
@@ -83,6 +92,7 @@
     },
 
     {"name":"3D Math Primer for Graphics",
+    "uid":"cdated",
     "units":"Pages",
     "current":41,
     "total":765,
@@ -92,6 +102,7 @@
     },
 
     {"name":"3D Game Programming for Kids",
+    "uid":"cdated",
     "units":"Pages",
     "current":134,
     "total":284,
@@ -101,6 +112,7 @@
     },
 
     {"name":"Agent Based Models",
+    "uid":"cdated",
     "units":"Sections",
     "current":11,
     "total":100,

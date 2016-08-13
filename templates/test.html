@@ -11,9 +11,22 @@
 
   <body>
 
+    <form id="update_progress" method="POST">
+        <input type="hidden" name="progress" />
+    </form>
+
     <script>
       function log_activity(id, current) {
         var retVal = prompt("Update progress: ", current);
+        // Validate user input
+        if (retVal == parseInt(retVal, 10)) {
+          var update_form = document.getElementById("update_progress");
+
+          update_form.action = "/goals/" + id;
+          update_form.progress.value = retVal;
+          update_form.submit();
+
+        }
       }
 
       var render = function(id, current, total, units, start, end) {
