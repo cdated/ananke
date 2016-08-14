@@ -38,7 +38,7 @@
         }
       }
 
-      var render = function(id, current, total, units, start, end) {
+      var render = function(id, current, total, units, start, end, done_today) {
         var now = new Date();
         var startDate = new Date(start);
         var endDate = new Date(end);
@@ -116,6 +116,9 @@
 
         var doc = document.getElementById("behind" + id);
         doc.innerHTML = behind;
+
+        var doc = document.getElementById("done_today" + id);
+        doc.innerHTML = parseInt(done_today);
 
         var doc = document.getElementById("progressPercent" + id);
         doc.innerHTML = percentComplete.toFixed(2) + "%";
@@ -203,6 +206,12 @@
         </div>
         <div class="goal-stat">
           <span class="goal-number">
+            <div id="done_today{{goal.id}}"></div>
+          </span>
+          <span class="goal-label">Done Today</span>
+        </div>
+        <div class="goal-stat">
+          <span class="goal-number">
             <div id="behind{{goal.id}}"></div>
           </span>
           <span class="goal-label">Behind</span>
@@ -239,7 +248,8 @@
                {{goal.total}},
                "{{goal.units}}",
                "{{goal.startDate}}",
-               "{{goal.endDate}}"
+               "{{goal.endDate}}",
+               "{{goal.done_today}}"
               )
       </script>
 

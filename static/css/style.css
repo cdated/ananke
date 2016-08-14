@@ -45,11 +45,11 @@
 }
 
 .goal-stat {
-    width: 14%;
-    height: 30px;
+    width: 12%;
+    height: 40px;
     padding: 10px;
     float: left;
-    margin: 0;
+    margin: 10;
     color: #333333;
 }
 
