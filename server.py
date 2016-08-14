@@ -5,11 +5,50 @@ import os
 import json
 from datetime import datetime
 import pymongo
+from bson.objectid import ObjectId
 from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
 USER="cdated"
+
+@app.route('/goals/new', methods=['POST', 'GET'])
+def new_goal():
+    col = db.goals
+    now = datetime.now()
+    new_goal = {"name"  : "New Goal",
+                "uid"   : USER,
+                "units" : "Pomodoros",
+                "current": 0,
+                "total" : 100,
+                "startDate" : now.replace(hour=0, minute=0, second=0,
+                                          microsecond=0).isoformat(),
+                "endDate" : now.replace(year=now.year + 1, hour=23, minute=59,
+                                          second=59, microsecond=0).isoformat(),
+                "updated" : str(now.date()),
+                "done_today" : 0
+                }
+
+    if request.method == 'POST':
+        for field in ['name', 'units', 'current', 'total']:
+            if field in request.form:
+                new_goal[field] = request.form[field]
+
+        # Update the start/end if value with appropriate times
+        for dateType, offset in [('startDate', 'T00:00:00Z'),
+                                 ('endDate', 'T23:59:59Z')]:
+            if dateType in request.form:
+                if request.form[dateType]:
+                    new_goal[field] = request.form[dateType] + offset
+
+        col.insert(new_goal)
+        return redirect('/')
+
+
+    if request.method == 'GET':
+        title = "Ananke - New Goal"
+        return render_template('goal.html', title=title, goal=new_goal,
+                               operation='Create')
 
 def handle_current(goal, value, col, match):
     current = goal['current']
@@ -21,13 +60,13 @@ def handle_current(goal, value, col, match):
     today = datetime.now().date()
     col.update(match, {'$set': {"updated": str(today)}})
 
-@app.route('/goals/<int:goal_id>', methods=['POST', 'GET'])
+@app.route('/goals/<string:goal_id>', methods=['POST', 'GET'])
 def update_progress(goal_id):
     col = db.goals
-    goal = col.find_one({"uid":USER, "id":goal_id})
+    goal = col.find_one({"uid":USER, "_id": ObjectId(goal_id)})
 
     if request.method == 'POST':
-        match = {"uid":USER, "id":goal_id}
+        match = {"uid":USER, "_id":ObjectId(goal_id)}
 
         for field in ['name', 'units', 'current', 'total']:
             if field in request.form:
@@ -50,7 +89,8 @@ def update_progress(goal_id):
 
     if request.method == 'GET':
         title = "Ananke - " + goal["name"]
-        return render_template('goal.html', title=title, goal=goal)
+        return render_template('goal.html', title=title, goal=goal,
+                               operation='Update')
 
 @app.route('/')
 def index():
@@ -64,7 +104,7 @@ def index():
         last_updated = datetime.strptime(updated, '%Y-%m-%d').date()
         if last_updated != today:
             update = {'$set': {'done_today': 0}}
-            col.update({"uid":USER, "id": goal["id"]}, update)
+            col.update({"uid":USER, "_id": goal["_id"]}, update)
 
     goals= col.find({"uid":USER}).sort("endDate", 1)
 

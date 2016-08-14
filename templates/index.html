@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 
     <!--  jQuery -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.slim.min.js"></script>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -57,7 +57,7 @@
             return decString >= 16 ? "" + hexString: "0" + hexString;
         }
 
-        var doc = document.getElementById("countdown" + id);
+        var doc = document.getElementById("countdown-" + id);
         //doc.innerHTML = daysRemaining;
         var eday = endDate.getDate();
         var emonthIndex = endDate.getMonth() + 1;
@@ -66,14 +66,14 @@
 
         var itemsRemaining = total - current
 
-        var doc = document.getElementById("avg" + id);
+        var doc = document.getElementById("avg-" + id);
         var avg_rate = current;
         if (daysPassed > 0) {
           avg_rate = (current/(daysPassed + 1)).toFixed(2);
         }
         doc.innerHTML = avg_rate;
 
-        var doc = document.getElementById("required" + id);
+        var doc = document.getElementById("required-" + id);
         // Don't count today in days remaining
         if (daysRemaining > 1) {
           var required_rate = (itemsRemaining/(daysRemaining-1)).toFixed(2);
@@ -82,7 +82,7 @@
         }
         doc.innerHTML = required_rate;
 
-        var doc = document.getElementById("predictedComplete" + id);
+        var doc = document.getElementById("predictedComplete-" + id);
         var predictedDate = new Date();
         if (avg_rate > 0) {
           var expectedDays = Math.ceil((total-current)/avg_rate);
@@ -114,22 +114,22 @@
           behind = Math.ceil(catchUp);
         }
 
-        var doc = document.getElementById("behind" + id);
+        var doc = document.getElementById("behind-" + id);
         doc.innerHTML = behind;
 
-        var doc = document.getElementById("done_today" + id);
+        var doc = document.getElementById("done_today-" + id);
         doc.innerHTML = parseInt(done_today);
 
-        var doc = document.getElementById("progressPercent" + id);
+        var doc = document.getElementById("progressPercent-" + id);
         doc.innerHTML = percentComplete.toFixed(2) + "%";
 
-        var doc = document.getElementById("progressRatio" + id);
+        var doc = document.getElementById("progressRatio-" + id);
         doc.innerHTML = current + "/" + total;
 
-        var doc = document.getElementById("units" + id);
+        var doc = document.getElementById("units-" + id);
         doc.innerHTML = units;
 
-        var doc = document.getElementById("progress" + id);
+        var doc = document.getElementById("progress-" + id);
         doc.style.float= "left";
         doc.style.width = percentComplete + "%";
         doc.style.height = "20px";
@@ -171,7 +171,7 @@
 
         doc.style.zIndex= "333";
 
-        var doc = document.getElementById("expected" + id);
+        var doc = document.getElementById("expected-" + id);
         doc.style.position = "relative";
         doc.style.left = expectedComplete + "%";
         doc.style.width = "0.4%";
@@ -183,67 +183,67 @@
       {% for goal in goals%}
 
       <div id=countdown-wrap>
-        <div onclick="edit_goal({{goal.id}})" id="goal">{{goal.name}}</div>
-        <div onclick="log_activity({{goal.id}}, {{goal.current}})" id="glass">
-          <div id="progress{{goal.id}}">
+        <div id="goal" onclick="edit_goal('{{goal._id}}')" >{{goal.name}}</div>
+        <div id="glass" onclick="log_activity('{{goal._id}}', '{{goal.current}}')" >
+          <div id="progress-{{goal._id}}">
           </div>
-          <div id="expected{{goal.id}}">
+          <div id="expected-{{goal._id}}">
           </div>
         </div>
         <div class="goal-stat">
           <span class="goal-number">
-            <div id="progressPercent{{goal.id}}"></div>
+            <div id="progressPercent-{{goal._id}}"></div>
           </span>
           <span class="goal-label">Complete</span>
         </div>
         <div class="goal-stat">
           <span class="goal-number">
-            <div id="progressRatio{{goal.id}}"></div>
+            <div id="progressRatio-{{goal._id}}"></div>
           </span>
           <span class="goal-label">
-            <div id="units{{goal.id}}"></div>
+            <div id="units-{{goal._id}}"></div>
           </span>
         </div>
         <div class="goal-stat">
           <span class="goal-number">
-            <div id="done_today{{goal.id}}"></div>
+            <div id="done_today-{{goal._id}}"></div>
           </span>
           <span class="goal-label">Done Today</span>
         </div>
         <div class="goal-stat">
           <span class="goal-number">
-            <div id="behind{{goal.id}}"></div>
+            <div id="behind-{{goal._id}}"></div>
           </span>
           <span class="goal-label">Behind</span>
         </div>
         <div class="goal-stat">
           <span class="goal-number">
-            <div id="required{{goal.id}}"></div>
+            <div id="required-{{goal._id}}"></div>
           </span>
           <span class="goal-label">Req Per Day</span>
         </div>
         <div class="goal-stat">
           <span class="goal-number">
-            <div id="avg{{goal.id}}"></div>
+            <div id="avg-{{goal._id}}"></div>
           </span>
           <span class="goal-label">Avg Per Day</span>
         </div>
         <div class="goal-stat">
           <span class="goal-number">
-            <div id="predictedComplete{{goal.id}}"></div>
+            <div id="predictedComplete-{{goal._id}}"></div>
           </span>
           <span class="goal-label">Predicted Date</span>
         </div>
         <div class="goal-stat">
           <span class="goal-number">
-            <div id="countdown{{goal.id}}"></div>
+            <div id="countdown-{{goal._id}}"></div>
           </span>
           <span class="goal-label">Due</span>
         </div>
       </div>
 
       <script>
-        render({{goal.id}},
+        render("{{goal._id}}",
                {{goal.current}},
                {{goal.total}},
                "{{goal.units}}",
