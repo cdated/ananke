@@ -4,7 +4,7 @@
 import os
 import json
 import pymongo
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
@@ -17,7 +17,7 @@ def update_progress(goal_id):
         update = {'$set': {'current': progress}}
         col.update(match, update)
 
-    return index()
+    return redirect('/')
 
 @app.route('/')
 def index():
