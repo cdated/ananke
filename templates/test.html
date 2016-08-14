@@ -7,15 +7,25 @@
   <head>
     <title>{% block title %}{{title}}{% endblock %} - goals</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!--  jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
 
   <body>
 
     <form id="update_progress" method="POST">
-        <input type="hidden" name="progress" />
+        <input type="hidden" name="current" />
     </form>
 
     <script>
+      function edit_goal(id) {
+        window.location = "goals/" + id;
+      }
+
       function log_activity(id, current) {
         var retVal = prompt("Update progress: ", current);
         // Validate user input
@@ -23,9 +33,8 @@
           var update_form = document.getElementById("update_progress");
 
           update_form.action = "/goals/" + id;
-          update_form.progress.value = retVal;
+          update_form.current.value = retVal;
           update_form.submit();
-
         }
       }
 
@@ -171,7 +180,7 @@
       {% for goal in goals%}
 
       <div id=countdown-wrap>
-        <div id="goal">{{goal.name}}</div>
+        <div onclick="edit_goal({{goal.id}})" id="goal">{{goal.name}}</div>
         <div onclick="log_activity({{goal.id}}, {{goal.current}})" id="glass">
           <div id="progress{{goal.id}}">
           </div>

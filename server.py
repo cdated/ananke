@@ -10,19 +10,38 @@ app = Flask(__name__)
 
 @app.route('/goals/<int:goal_id>', methods=['POST', 'GET'])
 def update_progress(goal_id):
-    if request.method == 'POST':
-        progress = request.form['progress']
-        col = db.goals
-        match = {"uid":"cdated", "id":goal_id}
-        update = {'$set': {'current': progress}}
-        col.update(match, update)
+    col = db.goals
+    goal = col.find_one({"uid":"cdated", "id":goal_id})
 
-    return redirect('/')
+    if request.method == 'POST':
+        match = {"uid":"cdated", "id":goal_id}
+
+        for field in ['name', 'units', 'current', 'total']:
+            if field in request.form:
+                value = request.form[field]
+                update = {'$set': {field: value}}
+                col.update(match, update)
+
+        # Update the start/end if value with appropriate times
+        for dateType, offset in [('startDate', 'T00:00:00Z'),
+                                 ('endDate', 'T23:59:59Z')]:
+            if dateType in request.form:
+                if request.form[dateType]:
+                    value = request.form[dateType] + offset
+                    update = {'$set': {dateType: value}}
+                    col.update(match, update)
+
+        return redirect('/')
+
+    if request.method == 'GET':
+        title = "Ananke - " + goal["name"]
+        return render_template('goal.html', title=title, goal=goal)
 
 @app.route('/')
 def index():
     col = db.goals
-    goals= col.find({"uid":"cdated"})
+    goals= col.find({"uid":"cdated"}).sort("endDate", 1)
+
     return render_template('test.html', title="Ananke - Goals", goals=goals)
 
 if __name__ == '__main__':
