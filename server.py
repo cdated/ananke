@@ -60,6 +60,12 @@ def handle_current(goal, value, col, match):
     today = datetime.now().date()
     col.update(match, {'$set': {"updated": str(today)}})
 
+@app.route('/goals/<string:goal_id>/delete', methods=['POST'])
+def delete_goal(goal_id):
+    col = db.goals
+    col.remove(ObjectId(goal_id))
+    return redirect('/')
+
 @app.route('/goals/<string:goal_id>', methods=['POST', 'GET'])
 def update_progress(goal_id):
     col = db.goals
