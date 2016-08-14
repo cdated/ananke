@@ -42,7 +42,7 @@ def index():
     col = db.goals
     goals= col.find({"uid":"cdated"}).sort("endDate", 1)
 
-    return render_template('test.html', title="Ananke - Goals", goals=goals)
+    return render_template('index.html', title="Ananke - Goals", goals=goals)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
