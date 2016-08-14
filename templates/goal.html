@@ -91,7 +91,8 @@
 
     {% if operation == "Update" %}
       <div style="width:40%;margin-left:45px" class="container">
-        <form method="POST" action="/goals/{{goal._id}}/delete">
+        <form method="POST" action="/goals/{{goal._id}}/delete"
+          onsubmit="return confirm('Are you sure you want to delete \'{{goal.name}}\'?');">
           <div class="form-group row">
             <div class="offset-sm-2 col-sm-10">
               <button type="submit" class="btn btn-danger">Delete</button>
@@ -110,26 +111,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
     <script>
-        $(document).ready(function(){
-            var date_input=$('input[name="startDate"]'); //our date input has the name "date"
-            var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-            date_input.datepicker({
-                format: 'yyyy-mm-dd',
-                container: container,
-                todayHighlight: true,
-                autoclose: true,
-            })
-        })
-        $(document).ready(function(){
-            var date_input=$('input[name="endDate"]'); //our date input has the name "date"
-            var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-            date_input.datepicker({
-                format: 'yyyy-mm-dd',
-                container: container,
-                todayHighlight: true,
-                autoclose: true,
-            })
-        })
+      $(document).ready(function(){
+          var date_input=$('input[name="startDate"]'); //our date input has the name "date"
+          var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+          date_input.datepicker({
+              format: 'yyyy-mm-dd',
+              container: container,
+              todayHighlight: true,
+              autoclose: true,
+          })
+      })
+      $(document).ready(function(){
+          var date_input=$('input[name="endDate"]'); //our date input has the name "date"
+          var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+          date_input.datepicker({
+              format: 'yyyy-mm-dd',
+              container: container,
+              todayHighlight: true,
+              autoclose: true,
+          })
+      })
     </script>
   </body>
 </html>
