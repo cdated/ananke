@@ -38,14 +38,44 @@
         }
       }
 
+      function leftpad(val) {
+          decString = parseInt(val, 10);
+          return decString >= 10 ? "" + val: "0" + val;
+      }
+
       var render = function(id, current, total, units, start, end, done_today) {
+
+        // Treat all time as local time by applying the local time offset
+        var local = new Date();
+        var offset = leftpad(local.getTimezoneOffset() / 60);
+        start += "-" + offset + ":00";
+        end += "-" + offset + ":00";
+
         var now = new Date();
+
         var startDate = new Date(start);
         var endDate = new Date(end);
+
+        var weekday = isWeekday(now);
+
+        // Hard-code 5 day week for work for now
+        if (id == "57afee479a7f8db5b8b64bd0") {
+          var five_day = true;
+        }
 
         var daysInPeriod = dayDiff(startDate, endDate);
         var daysRemaining = dayDiff(now, endDate);
         var daysPassed = dayDiff(startDate, now)-1;
+
+        function isWeekday(now) {
+          var daynum = now.getDay();
+          if (daynum == 0 || daynum == 6){
+            return false;
+          }
+          else{
+            return true;
+          }
+        }
 
         function dayDiff(first, second) {
             var diff = (second-first)/(1000*60*60*24);
@@ -76,11 +106,21 @@
         var doc = document.getElementById("required-" + id);
         // Don't count today in days remaining
         if (daysRemaining > 1) {
-          var required_rate = (itemsRemaining/(daysRemaining-1)).toFixed(2);
+          var required_rate = (itemsRemaining/(daysRemaining-1));
+
+          // Weight weekday requirement more on weekdays
+          if (five_day){
+            if (weekday) {
+              required_rate *= 7.0/5.0;
+            }
+            else {
+              required_rate = 0;
+            }
+          }
         } else {
           var required_rate = itemsRemaining
         }
-        doc.innerHTML = required_rate;
+        doc.innerHTML = Math.ceil(required_rate);
 
         var doc = document.getElementById("predictedComplete-" + id);
         var predictedDate = new Date();
@@ -111,14 +151,21 @@
         var catchUp = numExpected - current;
         var behind = 0
         if (catchUp > 0) {
-          behind = Math.ceil(catchUp);
+          behind = Math.round(catchUp);
         }
 
         var doc = document.getElementById("behind-" + id);
         doc.innerHTML = behind;
 
         var doc = document.getElementById("done_today-" + id);
-        doc.innerHTML = parseInt(done_today);
+        done_today = parseInt(done_today)
+        if (done_today >= required_rate) {
+          doc.innerHTML =  '<font color="gold">★ </font>' + done_today;
+        }
+
+        else {
+          doc.innerHTML = done_today;
+        }
 
         var doc = document.getElementById("progressPercent-" + id);
         doc.innerHTML = percentComplete.toFixed(2) + "%";
@@ -206,21 +253,21 @@
         </div>
         <div class="goal-stat">
           <span class="goal-number">
-            <div id="done_today-{{goal._id}}"></div>
-          </span>
-          <span class="goal-label">Done Today</span>
-        </div>
-        <div class="goal-stat">
-          <span class="goal-number">
             <div id="behind-{{goal._id}}"></div>
           </span>
           <span class="goal-label">Behind</span>
         </div>
         <div class="goal-stat">
           <span class="goal-number">
+            <div id="done_today-{{goal._id}}"></div>
+          </span>
+          <span class="goal-label">Done Today</span>
+        </div>
+        <div class="goal-stat">
+          <span class="goal-number">
             <div id="required-{{goal._id}}"></div>
           </span>
-          <span class="goal-label">Req Per Day</span>
+          <span class="goal-label">Today's Goal</span>
         </div>
         <div class="goal-stat">
           <span class="goal-number">

@@ -26,17 +26,20 @@ def new_goal():
                 "endDate" : now.replace(year=now.year + 1, hour=23, minute=59,
                                           second=59, microsecond=0).isoformat(),
                 "updated" : str(now.date()),
-                "done_today" : 0
+                "done_today" : 0,
+                "priority" : 0,
+                "notes" : ""
                 }
 
     if request.method == 'POST':
-        for field in ['name', 'units', 'current', 'total']:
+        for field in ['name', 'units', 'current', 'total', 'notes',
+                      'priority']:
             if field in request.form:
                 new_goal[field] = request.form[field]
 
         # Update the start/end if value with appropriate times
-        for dateType, offset in [('startDate', 'T00:00:00Z'),
-                                 ('endDate', 'T23:59:59Z')]:
+        for dateType, offset in [('startDate', 'T00:00:00'),
+                                 ('endDate', 'T23:59:59')]:
             if dateType in request.form:
                 if request.form[dateType]:
                     new_goal[field] = request.form[dateType] + offset
@@ -74,7 +77,8 @@ def update_progress(goal_id):
     if request.method == 'POST':
         match = {"uid":USER, "_id":ObjectId(goal_id)}
 
-        for field in ['name', 'units', 'current', 'total']:
+        for field in ['name', 'units', 'current', 'total',
+                      'notes', 'priority']:
             if field in request.form:
                 value = request.form[field]
                 if field == 'current':
@@ -83,8 +87,8 @@ def update_progress(goal_id):
                 col.update(match, update)
 
         # Update the start/end if value with appropriate times
-        for dateType, offset in [('startDate', 'T00:00:00Z'),
-                                 ('endDate', 'T23:59:59Z')]:
+        for dateType, offset in [('startDate', 'T00:00:00'),
+                                 ('endDate', 'T23:59:59')]:
             if dateType in request.form:
                 if request.form[dateType]:
                     value = request.form[dateType] + offset
@@ -112,7 +116,7 @@ def index():
             update = {'$set': {'done_today': 0}}
             col.update({"uid":USER, "_id": goal["_id"]}, update)
 
-    goals= col.find({"uid":USER}).sort("endDate", 1)
+    goals = col.find({"uid":USER}).sort([("priority", -1), ("endDate", 1)])
 
     return render_template('index.html', title="Ananke - Goals", goals=goals)
 
