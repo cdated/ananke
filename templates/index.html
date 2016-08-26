@@ -21,9 +21,22 @@
         <input type="hidden" name="current" />
     </form>
 
+    <form id="clear_done_today" method="POST">
+        <input type="hidden" />
+    </form>
+
     <script>
       function edit_goal(id) {
         window.location = "goals/" + id;
+      }
+
+      function clear_done_today(id) {
+        var retVal = confirm("Set done today back to zero without changing progress?");
+        if (retVal) {
+          var update_form = document.getElementById("clear_done_today");
+          update_form.action = "/goals/" + id + "/clear_today";
+          update_form.submit();
+        }
       }
 
       function log_activity(id, current) {
@@ -257,7 +270,7 @@
           </span>
           <span class="goal-label">Behind</span>
         </div>
-        <div class="goal-stat">
+        <div class="goal-stat" onclick="clear_done_today('{{goal._id}}')" >
           <span class="goal-number">
             <div id="done_today-{{goal._id}}"></div>
           </span>
