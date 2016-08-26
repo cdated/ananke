@@ -69,7 +69,7 @@ def clear_today(goal_id):
     col = db.goals
     update = {'$set': {'done_today': 0}}
     col.update({"uid":USER, "_id": ObjectId(goal_id)}, update)
-    return redirect('/')
+    return redirect('/#' + goal_id)
 
 @app.route('/goals/<string:goal_id>/delete', methods=['POST'])
 def delete_goal(goal_id):
@@ -103,7 +103,7 @@ def update_progress(goal_id):
                     update = {'$set': {dateType: value}}
                     col.update(match, update)
 
-        return redirect('/')
+        return redirect('/#' + goal_id)
 
     if request.method == 'GET':
         title = "Ananke - " + goal["name"]

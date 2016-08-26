@@ -241,7 +241,7 @@
       }
     </script>
       {% for goal in goals%}
-
+      <a name="{{goal._id}}"></a>
       <div id=countdown-wrap>
         <div id="goal" onclick="edit_goal('{{goal._id}}')" >{{goal.name}}</div>
         <div id="glass" onclick="log_activity('{{goal._id}}', '{{goal.current}}')" >
@@ -256,7 +256,7 @@
           </span>
           <span class="goal-label">Complete</span>
         </div>
-        <div class="goal-stat">
+        <div class="goal-stat" onclick="log_activity('{{goal._id}}', '{{goal.current}}')">
           <span class="goal-number">
             <div id="progressRatio-{{goal._id}}"></div>
           </span>
