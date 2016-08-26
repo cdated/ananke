@@ -53,6 +53,10 @@
     color: #333333;
 }
 
+.btn-space {
+    margin-top: 20px;
+}
+
 @media only screen and (max-width: 640px) {
     .goal-stat {
         width: 40%;
