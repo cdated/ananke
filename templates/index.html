@@ -71,14 +71,11 @@
 
         var weekday = isWeekday(now);
 
-        // Hard-code 5 day week for work for now
-        if (id == "57afee479a7f8db5b8b64bd0") {
-          var five_day = true;
-        }
-
         var daysInPeriod = dayDiff(startDate, endDate);
         var daysRemaining = dayDiff(now, endDate);
         var daysPassed = dayDiff(startDate, now)-1;
+
+        done_today = parseInt(done_today)
 
         function isWeekday(now) {
           var daynum = now.getDay();
@@ -116,21 +113,12 @@
         doc.innerHTML = avg_rate;
 
         var doc = document.getElementById("required-" + id);
+        todayRemaining = itemsRemaining + done_today;
         // Don't count today in days remaining
         if (daysRemaining > 1) {
-          var required_rate = (itemsRemaining/(daysRemaining));
-
-          // Weight weekday requirement more on weekdays
-          if (five_day){
-            if (weekday) {
-              required_rate *= 7.0/5.0;
-            }
-            else {
-              required_rate = 0;
-            }
-          }
+          var required_rate = (todayRemaining/(daysRemaining));
         } else {
-          var required_rate = itemsRemaining
+          var required_rate = todayRemaining
         }
         required_rate = Math.round(required_rate);
         doc.innerHTML = required_rate;
@@ -171,7 +159,6 @@
         doc.innerHTML = behind;
 
         var doc = document.getElementById("done_today-" + id);
-        done_today = parseInt(done_today)
         if (done_today >= required_rate) {
           doc.innerHTML =  '<font color="gold">★ </font>' + done_today;
         }
