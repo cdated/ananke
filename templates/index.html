@@ -101,7 +101,6 @@
         }
 
         var doc = document.getElementById("countdown-" + id);
-        //doc.innerHTML = daysRemaining;
         var eday = endDate.getDate();
         var emonthIndex = endDate.getMonth() + 1;
         var eyear = endDate.getFullYear();
@@ -119,7 +118,7 @@
         var doc = document.getElementById("required-" + id);
         // Don't count today in days remaining
         if (daysRemaining > 1) {
-          var required_rate = (itemsRemaining/(daysRemaining-1));
+          var required_rate = (itemsRemaining/(daysRemaining));
 
           // Weight weekday requirement more on weekdays
           if (five_day){
@@ -133,7 +132,8 @@
         } else {
           var required_rate = itemsRemaining
         }
-        doc.innerHTML = Math.ceil(required_rate);
+        required_rate = Math.round(required_rate);
+        doc.innerHTML = required_rate;
 
         var doc = document.getElementById("predictedComplete-" + id);
         var predictedDate = new Date();
