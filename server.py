@@ -12,6 +12,9 @@ app = Flask(__name__)
 
 USER="cdated"
 
+def groups():
+    return db.goals.distinct("group")
+
 @app.route('/goals/new', methods=['POST', 'GET'])
 def new_goal():
     col = db.goals
@@ -27,13 +30,14 @@ def new_goal():
                                           second=59, microsecond=0).isoformat(),
                 "updated" : str(now.date()),
                 "done_today" : 0,
+                "group" : "School",
                 "priority" : 0,
                 "notes" : ""
                 }
 
     if request.method == 'POST':
         for field in ['name', 'units', 'current', 'total', 'notes',
-                      'priority']:
+                      'group','priority']:
             if field in request.form:
                 new_goal[field] = request.form[field]
 
@@ -51,7 +55,7 @@ def new_goal():
     if request.method == 'GET':
         title = "Ananke - New Goal"
         return render_template('goal.html', title=title, goal=new_goal,
-                               operation='Create')
+                               groups=groups(), operation='Create')
 
 def handle_current(goal, value, col, match):
     current = goal['current']
@@ -105,7 +109,7 @@ def update_progress(goal_id):
         match = {"uid":USER, "_id":ObjectId(goal_id)}
 
         for field in ['name', 'units', 'current', 'total',
-                      'notes', 'priority']:
+                      'notes', 'group', 'priority']:
             if field in request.form:
                 value = request.form[field]
                 if field == 'current':
@@ -126,15 +130,22 @@ def update_progress(goal_id):
 
     if request.method == 'GET':
         title = "Ananke - " + goal["name"]
-        return render_template('goal.html', title=title, goal=goal,
+        return render_template('goal.html', title=title, goal=goal, groups=groups(),
                                operation='Update')
+
+@app.route('/goals/group/<string:group>', methods=['GET'])
+def group(group):
+    col = db.goals
+    goals = col.find({"uid":USER, "group": group, "archived": {"$ne": True}}).sort([("priority", -1), ("endDate", 1)])
+
+    return render_template('index.html', title="Ananke - Archived Goals", goals=goals, groups=groups(), archive='True')
 
 @app.route('/goals/archived', methods=['GET'])
 def archived():
     col = db.goals
     goals = col.find({"uid":USER, "archived": {"$eq": True}}).sort([("priority", -1), ("endDate", 1)])
 
-    return render_template('index.html', title="Ananke - Archived Goals", goals=goals, archive='True')
+    return render_template('index.html', title="Ananke - Archived Goals", goals=goals, groups=groups(), archive='True')
 
 @app.route('/')
 def index():
@@ -152,7 +163,7 @@ def index():
 
     goals = col.find({"uid":USER, "archived": {"$ne": True}}).sort([("priority", -1), ("endDate", 1)])
 
-    return render_template('index.html', title="Ananke - Goals", goals=goals)
+    return render_template('index.html', title="Ananke - Goals", goals=goals, groups=groups())
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

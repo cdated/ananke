@@ -236,8 +236,8 @@
       {% for goal in goals%}
       <a name="{{goal._id}}"></a>
       <div id=countdown-wrap>
-        <div id="goal" onclick="edit_goal('{{goal._id}}')" >{{goal.name}}</div>
-        <div id="glass" onclick="log_activity('{{goal._id}}', '{{goal.current}}')" >
+        <div id="goal" onclick="edit_goal('{{goal._id}}')" class="pointer">{{goal.name}}</div>
+        <div id="glass" onclick="log_activity('{{goal._id}}', '{{goal.current}}')" class="pointer">
           <div id="progress-{{goal._id}}">
           </div>
           <div id="expected-{{goal._id}}">
@@ -263,7 +263,7 @@
           </span>
           <span class="goal-label">Behind</span>
         </div>
-        <div class="goal-stat" onclick="clear_done_today('{{goal._id}}')" >
+        <div class="goal-stat pointer" onclick="clear_done_today('{{goal._id}}')" >
           <span class="goal-number">
             <div id="done_today-{{goal._id}}"></div>
           </span>
@@ -312,7 +312,7 @@
     {% if archive != "True" %}
     <center>
       <form method="GET" action="/goals/new">
-        <button type="submit" class="btn btn-primary btn-lg btn-space">Create Goal</button>
+        <button type="submit" class="btn btn-default btn-sm btn-block btn-space">Add Goal</button>
       </form>
     </center>
     {% endif %}
