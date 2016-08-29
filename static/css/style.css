@@ -53,6 +53,11 @@
     color: #333333;
 }
 
+.btn-container {
+    display: flex;
+    justify-content: space-around;
+}
+
 .btn-space {
     margin-top: 20px;
 }

@@ -30,14 +30,16 @@
 
   </head>
 
+
   <body>
+    {% include 'navbar.html' %}
     <div class="container">
       <div class="page-header">
         <h1>Edit Goal</h1>
       </div>
 
     <div style="width:40%;margin-left:45px" class="container">
-      <form method="POST">
+      <form method="POST" id="update-form">
       <div class="form-group row">
         <label for="name" class="col-xs-2 col-form-label">Name</label>
         <div class="col-xs-10">
@@ -96,26 +98,31 @@
             <textarea class="form-control" type="text" id="notes" name="notes" rows="3" placeholder="Optional notes about tasks">{{goal.notes}}</textarea>
           </div>
       </div>
-      <div class="form-group row">
-        <div class="offset-sm-2 col-sm-10">
-          <button type="submit" class="btn btn-primary">{{operation}}</button>
+          <div class="btn-container">
+          <button type="submit" form="update-form" class="btn btn-primary">{{operation}}</button>
+        {% if operation == "Update" %}
+            <button type="submit" form="copy-form" class="btn btn-primary">Copy</button>
+            <button type="submit" form="archive-form" class="btn btn-primary">Archive</button>
+            <button type="submit" form="delete-form" class="btn btn-danger">Delete</button>
+        {% endif %}
         </div>
-      </div>
     </form>
     </div>
 
-    {% if operation == "Update" %}
-      <div style="width:40%;margin-left:45px" class="container">
-        <form method="POST" action="/goals/{{goal._id}}/delete"
-          onsubmit="return confirm('Are you sure you want to delete \'{{goal.name}}\'?');">
-          <div class="form-group row">
-            <div class="offset-sm-2 col-sm-10">
-              <button type="submit" class="btn btn-danger">Delete</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    {% endif %}
+    <div style="width:40%;margin-left:45px" class="container">
+      <form method="POST" id="copy-form" action="/goals/{{goal._id}}/copy"></form>
+    </div>
+
+    <div style="width:40%;margin-left:45px" class="container">
+      <form method="POST" id="archive-form" action="/goals/{{goal._id}}/archive"
+        onsubmit="return confirm('Are you sure you want to archive \'{{goal.name}}\'?');"></form>
+    </div>
+
+    <div style="width:40%;margin-left:45px" class="container">
+      <form method="POST" id="delete-form" action="/goals/{{goal._id}}/delete"
+        onsubmit="return confirm('Are you sure you want to delete \'{{goal.name}}\'?');"></form>
+    </div>
+
 
     <!-- End Header div -->
     </div>

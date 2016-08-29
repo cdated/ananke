@@ -71,6 +71,25 @@ def clear_today(goal_id):
     col.update({"uid":USER, "_id": ObjectId(goal_id)}, update)
     return redirect('/#' + goal_id)
 
+@app.route('/goals/<string:goal_id>/copy', methods=['POST'])
+def copy_goal(goal_id):
+    col = db.goals
+    goal = col.find_one({"uid":USER, "_id": ObjectId(goal_id)})
+
+    # Insert new goal object with a new _id
+    goal['_id'] = ObjectId()
+    col.insert(goal)
+    return redirect('/')
+
+@app.route('/goals/<string:goal_id>/archive', methods=['POST'])
+def archive_goal(goal_id):
+    print("ACHIVING")
+    col = db.goals
+    match = {"uid":USER, "_id": ObjectId(goal_id)}
+    update = {'$set': {"archived": True}}
+    col.update(match, update)
+    return redirect('/')
+
 @app.route('/goals/<string:goal_id>/delete', methods=['POST'])
 def delete_goal(goal_id):
     col = db.goals
@@ -110,13 +129,20 @@ def update_progress(goal_id):
         return render_template('goal.html', title=title, goal=goal,
                                operation='Update')
 
+@app.route('/goals/archived', methods=['GET'])
+def archived():
+    col = db.goals
+    goals = col.find({"uid":USER, "archived": {"$eq": True}}).sort([("priority", -1), ("endDate", 1)])
+
+    return render_template('index.html', title="Ananke - Archived Goals", goals=goals, archive='True')
+
 @app.route('/')
 def index():
     col = db.goals
-    goals= col.find({"uid":USER}).sort("endDate", 1)
 
     # Clear out done_todays from yesterdays
     today = datetime.now().date()
+    goals= col.find({"uid":USER})
     for goal in goals:
         updated = goal['updated']
         last_updated = datetime.strptime(updated, '%Y-%m-%d').date()
@@ -124,7 +150,7 @@ def index():
             update = {'$set': {'done_today': 0}}
             col.update({"uid":USER, "_id": goal["_id"]}, update)
 
-    goals = col.find({"uid":USER}).sort([("priority", -1), ("endDate", 1)])
+    goals = col.find({"uid":USER, "archived": {"$ne": True}}).sort([("priority", -1), ("endDate", 1)])
 
     return render_template('index.html', title="Ananke - Goals", goals=goals)
 

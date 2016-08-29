@@ -16,6 +16,7 @@
   </head>
 
   <body>
+    {% include 'navbar.html' %}
 
     <form id="update_progress" method="POST">
         <input type="hidden" name="current" />
@@ -112,17 +113,6 @@
         }
         doc.innerHTML = avg_rate;
 
-        var doc = document.getElementById("required-" + id);
-        todayRemaining = itemsRemaining + done_today;
-        // Don't count today in days remaining
-        if (daysRemaining > 1) {
-          var required_rate = (todayRemaining/(daysRemaining));
-        } else {
-          var required_rate = todayRemaining
-        }
-        required_rate = Math.round(required_rate);
-        doc.innerHTML = required_rate;
-
         var doc = document.getElementById("predictedComplete-" + id);
         var predictedDate = new Date();
         if (avg_rate > 0) {
@@ -157,6 +147,22 @@
 
         var doc = document.getElementById("behind-" + id);
         doc.innerHTML = behind;
+
+        var doc = document.getElementById("required-" + id);
+        todayRemaining = itemsRemaining + done_today;
+
+        // How much to increase daily goal assuming the goal will
+        // not be achieved every day
+        multiplier = 1.5
+
+        // Don't count today in days remaining
+        if (daysRemaining > 1) {
+          var required_rate = (todayRemaining/(daysRemaining)) * multiplier;
+        } else {
+          var required_rate = todayRemaining
+        }
+        required_rate = Math.round(required_rate);
+        doc.innerHTML = required_rate;
 
         var doc = document.getElementById("done_today-" + id);
         if (done_today >= required_rate) {
@@ -302,11 +308,15 @@
       </script>
 
     {% endfor %}
+
+    {% if archive != "True" %}
     <center>
       <form method="GET" action="/goals/new">
         <button type="submit" class="btn btn-primary btn-lg btn-space">Create Goal</button>
       </form>
     </center>
+    {% endif %}
+
     <br/>
 
   </body>
