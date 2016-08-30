@@ -49,6 +49,7 @@ def new_goal():
                     new_goal[field] = request.form[dateType] + offset
 
         col.insert(new_goal)
+
         return redirect('/')
 
 
@@ -69,10 +70,14 @@ def handle_current(goal, value, col, match):
 
 @app.route('/goals/<string:goal_id>/clear_today', methods=['POST'])
 def clear_today(goal_id):
-    print(goal_id)
     col = db.goals
     update = {'$set': {'done_today': 0}}
     col.update({"uid":USER, "_id": ObjectId(goal_id)}, update)
+
+    referrer = request.form['route']
+    if "group" in referrer:
+        return redirect(referrer)
+
     return redirect('/#' + goal_id)
 
 @app.route('/goals/<string:goal_id>/copy', methods=['POST'])
