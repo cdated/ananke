@@ -20,6 +20,7 @@
 
     <form id="update_progress" method="POST">
         <input type="hidden" name="current" />
+        <input type="hidden" name="route" />
     </form>
 
     <form id="clear_done_today" method="POST">
@@ -48,6 +49,7 @@
 
           update_form.action = "/goals/" + id;
           update_form.current.value = retVal;
+          update_form.route.value = window.location;
           update_form.submit();
         }
       }

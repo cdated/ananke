@@ -126,6 +126,10 @@ def update_progress(goal_id):
                     update = {'$set': {dateType: value}}
                     col.update(match, update)
 
+        referrer = request.form['route']
+        if "group" in referrer:
+            return redirect(referrer)
+
         return redirect('/#' + goal_id)
 
     if request.method == 'GET':

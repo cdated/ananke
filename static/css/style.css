@@ -1,5 +1,5 @@
 #countdown-wrap {
-    width: 80%;
+    width: 85%;
     height: 120px;
     margin: auto;
     padding: 20px;
@@ -45,7 +45,7 @@
 }
 
 .goal-stat {
-    width: 12%;
+    width: 12.5%;
     height: 40px;
     padding: 10px;
     float: left;
