@@ -232,7 +232,7 @@
         var doc = document.getElementById("expected-" + id);
         doc.style.position = "relative";
         doc.style.left = expectedComplete + "%";
-        doc.style.width = "0.4%";
+        doc.style.width = "4px";
         doc.style.height = "20px";
         doc.style.background= "#444444";
         doc.style.zIndex= "334";
@@ -240,7 +240,7 @@
     </script>
       {% for goal in goals%}
       <a name="{{goal._id}}"></a>
-      <div id=countdown-wrap>
+      <div id=countdown-wrap class="container-fluid">
         <div id="goal" onclick="edit_goal('{{goal._id}}')" class="pointer">{{goal.name}}</div>
         <div id="glass" onclick="log_activity('{{goal._id}}', '{{goal.current}}')" class="pointer">
           <div id="progress-{{goal._id}}">
@@ -249,54 +249,54 @@
           </div>
         </div>
         <div class="goal-stat">
+          <span class="goal-label">Complete</span>
           <span class="goal-number">
             <div id="progressPercent-{{goal._id}}"></div>
           </span>
-          <span class="goal-label">Complete</span>
         </div>
         <div class="goal-stat" onclick="log_activity('{{goal._id}}', '{{goal.current}}')">
-          <span class="goal-number">
-            <div id="progressRatio-{{goal._id}}"></div>
-          </span>
           <span class="goal-label">
             <div id="units-{{goal._id}}"></div>
           </span>
+          <span class="goal-number">
+            <div id="progressRatio-{{goal._id}}"></div>
+          </span>
         </div>
         <div class="goal-stat">
+          <span class="goal-label">Behind</span>
           <span class="goal-number">
             <div id="behind-{{goal._id}}"></div>
           </span>
-          <span class="goal-label">Behind</span>
         </div>
         <div class="goal-stat pointer" onclick="clear_done_today('{{goal._id}}')" >
+          <span class="goal-label">Done Today</span>
           <span class="goal-number">
             <div id="done_today-{{goal._id}}"></div>
           </span>
-          <span class="goal-label">Done Today</span>
         </div>
         <div class="goal-stat">
+          <span class="goal-label">Today's Goal</span>
           <span class="goal-number">
             <div id="required-{{goal._id}}"></div>
           </span>
-          <span class="goal-label">Today's Goal</span>
         </div>
         <div class="goal-stat">
+          <span class="goal-label">Avg Per Day</span>
           <span class="goal-number">
             <div id="avg-{{goal._id}}"></div>
           </span>
-          <span class="goal-label">Avg Per Day</span>
         </div>
         <div class="goal-stat">
+          <span class="goal-label">Predicted</span>
           <span class="goal-number">
             <div id="predictedComplete-{{goal._id}}"></div>
           </span>
-          <span class="goal-label">Predicted Date</span>
         </div>
         <div class="goal-stat">
+          <span class="goal-label">Due</span>
           <span class="goal-number">
             <div id="countdown-{{goal._id}}"></div>
           </span>
-          <span class="goal-label">Due</span>
         </div>
       </div>
 

@@ -1,6 +1,5 @@
 #countdown-wrap {
     width: 85%;
-    height: 120px;
     margin: auto;
     padding: 20px;
     font-family: arial;
@@ -9,7 +8,6 @@
 @media only screen and (max-width: 640px) {
     #countdown-wrap {
         width: 100%;
-        height: 120px;
         margin: auto;
         padding: 20px;
         font-family: arial;
@@ -25,6 +23,7 @@
 @media only screen and (max-width: 640px) {
     #goal {
         text-align: center;
+        width: 100%;
     }
 }
 
@@ -48,12 +47,14 @@
 }
 
 @media only screen and (max-width: 640px) {
-    width: 100%;
-    height: 10px;
-    background: #c7c7c7;
-    border-radius: 10px;
-    float: left;
-    overflow: hidden;
+    #glass {
+        width: 100%;
+        height: 20px;
+        background: #c7c7c7;
+        border-radius: 10px;
+        float: left;
+        overflow: hidden;
+    }
 }
 
 #progress {
@@ -65,12 +66,12 @@
 }
 
 #expected {
-    position: relative;
     left: 0%;
-    width: 0.2%;
+    position: "relative";
+    width: 10px;
     height: 20px;
-    background: #888888;
-    z-index: 333;
+    background: #444444;
+    z-index: 334;
 }
 
 .goal-stat {
@@ -84,8 +85,9 @@
 
 @media only screen and (max-width: 640px) {
     .goal-stat {
-        width: 40%;
-        text-align: center;
+        width: 50%;
+        padding: 25px;
+        float: left;
     }
 }
 
