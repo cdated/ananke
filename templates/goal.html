@@ -28,6 +28,7 @@
     <style>.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}</style>
 
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
 
 
@@ -38,7 +39,7 @@
         <h1>Edit Goal</h1>
       </div>
 
-    <div style="width:40%;margin-left:45px" class="container">
+    <div class="add_goal_container">
       <form method="POST" id="update-form">
       <div class="form-group row">
         <label for="name" class="col-xs-2 col-form-label">Name</label>
@@ -65,7 +66,7 @@
         </div>
       </div>
       <div class="form-group row">
-       <label for="startDate" class="control-label col-sm-2 requiredField">Start Date</label>
+       <label for="startDate" class="col-xs-2 col-form-label">Start Date</label>
        <div class="col-xs-10">
          <div class="input-group">
           <div class="input-group-addon">
@@ -76,7 +77,7 @@
         </div>
       </div>
       <div class="form-group row">
-       <label for="endDate" class="control-label col-sm-2 requiredField">Due Date</label>
+       <label for="endDate" class="col-xs-2 col-form-label">Due Date</label>
        <div class="col-xs-10">
          <div class="input-group">
           <div class="input-group-addon">
@@ -99,7 +100,7 @@
         </div>
       </div>
       <div class="form-group row">
-          <label for="notes" class="control-label col-sm-2 requiredField">Notes</label>
+          <label for="notes" class="col-xs-2 col-form-label">Notes</label>
           <div class="col-xs-10">
             <textarea class="form-control" type="text" id="notes" name="notes" rows="3" placeholder="Optional notes about tasks">{{goal.notes}}</textarea>
           </div>

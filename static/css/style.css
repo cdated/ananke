@@ -6,6 +6,16 @@
     font-family: arial;
 }
 
+@media only screen and (max-width: 640px) {
+    #countdown-wrap {
+        width: 100%;
+        height: 120px;
+        margin: auto;
+        padding: 20px;
+        font-family: arial;
+    }
+}
+
 #goal {
     font-size: 30px;
     text-align: right;
@@ -18,7 +28,26 @@
     }
 }
 
+.add_goal_container {
+    width: 400px
+}
+
+@media only screen and (max-width: 640px) {
+    .add_goal_container {
+        width: 100%
+    }
+}
+
 #glass {
+    width: 100%;
+    height: 10px;
+    background: #c7c7c7;
+    border-radius: 10px;
+    float: left;
+    overflow: hidden;
+}
+
+@media only screen and (max-width: 640px) {
     width: 100%;
     height: 10px;
     background: #c7c7c7;
@@ -53,6 +82,13 @@
     color: #333333;
 }
 
+@media only screen and (max-width: 640px) {
+    .goal-stat {
+        width: 40%;
+        text-align: center;
+    }
+}
+
 .btn-container {
     display: flex;
     justify-content: space-around;
@@ -60,13 +96,6 @@
 
 .btn-space {
     margin-top: 20px;
-}
-
-@media only screen and (max-width: 640px) {
-    .goal-stat {
-        width: 40%;
-        text-align: center;
-    }
 }
 
 .goal-number,
