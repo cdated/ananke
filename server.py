@@ -70,20 +70,6 @@ def handle_current(goal, value, col, match):
     today = datetime.now().date()
     col.update(match, {'$set': {"updated": str(today)}})
 
-# Occurs when a user clicks the Done Today region and confirms
-@app.route('/goals/<string:goal_id>/clear_today', methods=['POST'])
-def clear_today(goal_id):
-    col = db.goals
-    update = {'$set': {'done_today': 0}}
-    col.update({"uid":USER, "_id": ObjectId(goal_id)}, update)
-
-    if 'route' in request.form:
-        referrer = request.form['route']
-        if "group" in referrer:
-            return redirect(referrer)
-
-    return redirect('/#' + goal_id)
-
 @app.route('/goals/<string:goal_id>/copy', methods=['POST'])
 def copy_goal(goal_id):
     col = db.goals

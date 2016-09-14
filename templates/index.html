@@ -24,21 +24,21 @@
         <input type="hidden" name="route" />
     </form>
 
-    <form id="clear_done_today" method="POST">
-        <input type="hidden" />
-        <input type="hidden" name="route" />
-    </form>
-
     <script>
       function edit_goal(id) {
         window.location = "/goals/" + id;
       }
 
-      function clear_done_today(id) {
-        var retVal = confirm("Set done today back to zero without changing progress?");
-        if (retVal) {
-          var update_form = document.getElementById("clear_done_today");
-          update_form.action = "/goals/" + id + "/clear_today";
+      function log_done_today(id, current, done_today) {
+        var retVal = prompt("Set done today: ", done_today);
+        // Validate user input
+        if (retVal == parseInt(retVal, 10)) {
+          var update_form = document.getElementById("update_progress");
+
+          var done_difference = parseInt(retVal, 10) - done_today;
+
+          update_form.action = "/goals/" + id;
+          update_form.current.value = parseInt(current, 10) + done_difference;
           update_form.route.value = window.location;
           update_form.submit();
         }
@@ -268,7 +268,7 @@
             <div id="behind-{{goal._id}}"></div>
           </span>
         </div>
-        <div class="goal-stat pointer" onclick="clear_done_today('{{goal._id}}')" >
+        <div class="goal-stat pointer" onclick="log_done_today('{{goal._id}}', '{{goal.current}}', '{{goal.done_today}}')" >
           <span class="goal-label">Done Today</span>
           <span class="goal-number">
             <div id="done_today-{{goal._id}}"></div>
