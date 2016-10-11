@@ -83,9 +83,19 @@
     color: #333333;
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 750px) {
+    .goal-stat {
+        width: 25%;
+        height: 60px;
+        padding: 25px;
+        float: left;
+    }
+}
+
+@media only screen and (max-width: 500px) {
     .goal-stat {
         width: 50%;
+        height: 50px;
         padding: 25px;
         float: left;
     }
@@ -111,4 +121,11 @@
 
 .pointer {
     cursor: pointer;
+}
+
+#top-nav {
+    margin-bottom: 0 !important;
+}
+
+
 }

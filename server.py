@@ -33,7 +33,7 @@ def new_goal():
                                           second=59, microsecond=0).isoformat(),
                 "updated" : str(now.date()),
                 "done_today" : 0,
-                "group" : "School",
+                "group" : "Health",
                 "priority" : 0,
                 "notes" : ""
                 }
@@ -121,7 +121,7 @@ def update_progress(goal_id):
 
         if 'route' in request.form:
             referrer = request.form['route']
-            if "group" in referrer:
+            if "/group/" in referrer or "/today/" in referrer:
                 return redirect(referrer)
 
         return redirect('/#' + goal_id)
@@ -146,6 +146,16 @@ def refresh_done_today():
             update = {'$set': {'done_today': 0}}
             col.update({"uid":USER, "_id": goal["_id"]}, update)
 
+@app.route('/goals/today', methods=['GET'])
+def hide_done():
+    col = db.goals
+    refresh_done_today()
+
+    goals = col.find({"uid":USER, "archived": {"$ne": True}}).sort([("priority", -1), ("endDate", 1)])
+
+    title = "Ananke - Today's Goals"
+    group = "Today's"
+    return render_template('index.html', title=title, hide_done=True, group=group, goals=goals, groups=groups(), username=USER)
 
 @app.route('/goals/group/<string:group>', methods=['GET'])
 def group(group):
@@ -154,8 +164,8 @@ def group(group):
 
     goals = col.find({"uid":USER, "group": group, "archived": {"$ne": True}}).sort([("priority", -1), ("endDate", 1)])
 
-    title = "Ananke - %s Group" % group
-    return render_template('index.html', title=title, goals=goals, groups=groups(), archive='True', username=USER)
+    title = "Ananke - %s Goals" % group
+    return render_template('index.html', title=title, goals=goals, group=group, groups=groups(), username=USER)
 
 @app.route('/goals/archived', methods=['GET'])
 def archived():
