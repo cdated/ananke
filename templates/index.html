@@ -69,7 +69,8 @@
           return decString >= 10 ? "" + val: "0" + val;
       }
 
-      var render = function(id, current, total, units, start, end, done_today, hide_done) {
+      var render = function(id, current, total, units, start, end, done_today,
+                            hide_done, todays_goal) {
         // Treat all time as local time by applying the local time offset
         var local = new Date();
         var offset = leftpad(local.getTimezoneOffset() / 60);
@@ -183,6 +184,9 @@
         // If you are behind, but the rate is still zero ask for 1
         if (required_rate == 0 && behind > 0) {
           required_rate = 1;
+        }
+        else if (required_rate <= 0) {
+          required_rate = 0
         }
 
         doc.innerHTML = required_rate;
@@ -334,7 +338,8 @@
                "{{goal.startDate}}",
                "{{goal.endDate}}",
                "{{goal.done_today}}",
-               "{{hide_done}}"
+               "{{hide_done}}",
+               "{{todays_goal}}"
               )
       </script>
 
