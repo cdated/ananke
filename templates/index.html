@@ -86,6 +86,9 @@
 
         var daysInPeriod = dayDiff(startDate, endDate);
         var daysRemaining = dayDiff(now, endDate);
+        if (daysRemaining < 0) {
+          daysRemaining = 0;
+        }
         var daysPassed = dayDiff(startDate, now)-1;
 
         done_today = parseInt(done_today)
@@ -125,9 +128,11 @@
         }
         doc.innerHTML = avg_rate;
 
+        var percentComplete = (current/total) * 100;
+
         var doc = document.getElementById("predictedComplete-" + id);
         var predictedDate = new Date();
-        if (avg_rate > 0) {
+        if (avg_rate > 0 && percentComplete < 100) {
           var expectedDays = Math.ceil((total-current)/avg_rate);
           predictedDate.setDate(now.getDate()+expectedDays);
           var day = predictedDate.getDate();
@@ -140,8 +145,6 @@
           var year = predictedDate.getFullYear();
         }
         doc.innerHTML = monthIndex + "/"+ day + "/" + year;
-
-        var percentComplete = (current/total) * 100;
 
         // If the deadline is passed ensure expectedComplete stays at 100%
         if (daysPassed + 1 >= daysInPeriod) {
