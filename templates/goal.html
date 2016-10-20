@@ -55,13 +55,21 @@
       <div class="form-group row">
         <label for="current" class="col-xs-2 col-form-label">Current</label>
         <div class="col-xs-10">
-          <input class="form-control" type="number" value="{{goal.current}}" name="current" id="current">
+          <input class="form-control" type="number" value="{{goal.current}}" name="current" min="0" id="current">
         </div>
       </div>
       <div class="form-group row">
         <label for="total" class="col-xs-2 col-form-label">Total</label>
         <div class="col-xs-10">
-          <input class="form-control" type="number" value="{{goal.total}}" name="total" id="total">
+          <input class="form-control" type="number" value="{{goal.total}}" name="total" min="0" id="total">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="total" class="col-xs-2 col-form-label">Daily Goal</label>
+        <div class="col-xs-10">
+          <input class="form-control" type="number" value="{{goal.daily_goal_set}}"
+                 name="daily_goal_set" placeholder="Leave empty for auto updating"
+                 min="0" id="daily_goal_set">
         </div>
       </div>
       <div class="form-group row">
@@ -95,7 +103,7 @@
       <div class="form-group row">
         <label for="priority" class="col-xs-2 col-form-label">Priority</label>
         <div class="col-xs-10">
-          <input class="form-control" type="number" value="{{goal.priority}}" name="priority" id="priority">
+          <input class="form-control" type="number" value="{{goal.priority}}" name="priority" min="0" id="priority">
         </div>
       </div>
       <div class="form-group row">
@@ -151,6 +159,7 @@
               container: container,
               todayHighlight: true,
               autoclose: true,
+              orientation: "top",
           })
       })
       $(document).ready(function(){
@@ -161,6 +170,7 @@
               container: container,
               todayHighlight: true,
               autoclose: true,
+              orientation: "top",
           })
       })
     </script>

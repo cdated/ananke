@@ -69,8 +69,8 @@
           return decString >= 10 ? "" + val: "0" + val;
       }
 
-      var render = function(id, current, total, units, start, end, done_today,
-                            hide_done, todays_goal) {
+      var render = function(id, current, total, daily_goal_set, units, start,
+                            end, done_today, hide_done) {
         // Treat all time as local time by applying the local time offset
         var local = new Date();
         var offset = leftpad(local.getTimezoneOffset() / 60);
@@ -190,12 +190,13 @@
         }
         required_rate = Math.round(required_rate);
 
-        // If you are behind, but the rate is still zero ask for 1
-        if (required_rate == 0 && behind > 0) {
-          required_rate = 1;
+        if (required_rate <= 0) {
+          required_rate = 0;
         }
-        else if (required_rate <= 0) {
-          required_rate = 0
+
+        // Let user override the goal for each day
+        if (daily_goal_set != "") {
+          required_rate = parseInt(daily_goal_set, 10);
         }
 
         doc.innerHTML = required_rate;
@@ -261,7 +262,9 @@
 
         // If today's work is done hide the goal and undo all the work here
         var doc = document.getElementById("done_today-" + id);
-        if (done_today >= required_rate) {
+        if ((done_today >= required_rate) &&
+            // Withhold gold star if behind and nothing done today
+            (behind == 0 || done_today > 0)) {
           doc.innerHTML =  '<font color="gold">★ </font>' + done_today;
           if (hide_done === "True") {
             var element = document.getElementById(id);
@@ -338,17 +341,16 @@
       </div>
       </div>
 
-
       <script>
         render("{{goal._id}}",
                {{goal.current}},
                {{goal.total}},
+               "{{goal.daily_goal_set}}",
                "{{goal.units}}",
                "{{goal.startDate}}",
                "{{goal.endDate}}",
                "{{goal.done_today}}",
-               "{{hide_done}}",
-               "{{todays_goal}}"
+               "{{hide_done}}"
               )
       </script>
 

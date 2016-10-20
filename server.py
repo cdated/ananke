@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 USER = os.environ.get('USER', 'cdated')
 
-GOAL_KEYS = ['name', 'units', 'current', 'total',
+GOAL_KEYS = ['name', 'units', 'current', 'total', 'daily_goal_set',
              'group','priority', 'notes']
 
 def groups():
