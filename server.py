@@ -186,7 +186,7 @@ def index():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.debug = True
+    app.debug = os.environ.get('DEBUG', False)
 
     uri = os.environ.get('MONGOCLIENT', 'localhost')
     client = pymongo.MongoClient(uri)
