@@ -124,7 +124,13 @@
         var doc = document.getElementById("avg-" + id);
         var avg_rate = current;
         if (daysPassed > 0) {
-          avg_rate = (current/(daysPassed + 1)).toFixed(2);
+          if (daysRemaining == 0) {
+            // Average after deadline
+            avg_rate = (current/daysInPeriod).toFixed(2);
+          } else {
+            // Average when goal is active
+            avg_rate = (current/(daysPassed + 1)).toFixed(2);
+          }
         }
         doc.innerHTML = avg_rate;
 
