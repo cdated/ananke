@@ -77,6 +77,7 @@ def copy_goal(goal_id):
 
     # Insert new goal object with a new _id
     goal['_id'] = ObjectId()
+    goal['done_today'] = goal['current']
     col.insert(goal)
     return redirect('/')
 
